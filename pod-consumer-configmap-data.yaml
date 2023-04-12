@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: consumer
+  namespace: nextapp
+spec:
+  containers:
+  - name: consumer
+    image: "nginx:latest"
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    env:
+      - name: API_ENDPOINT
+        valueFrom:
+          configMapKeyRef:
+            name: ext-service-configmap
+            key: api_endpoint
+      - name: USERNAME
+        valueFrom:
+          configMapKeyRef:
+            name: ext-service-configmap
+            key: username
+    ports:
+      - containerPort: 80
+  restartPolicy: Never
